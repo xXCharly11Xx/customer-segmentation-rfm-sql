@@ -1,93 +1,76 @@
-# Customer Segmentation (RFM) con SQL + Python (SQLite)
+# Customer Segmentation (RFM) — SQL + Python
 
-Proyecto de analítica de clientes usando el dataset **Online Retail** para construir segmentación **RFM** (Recency, Frequency, Monetary) sobre transacciones limpias en **SQLite**, consultadas con **SQL** y analizadas/visualizadas con **Python**.
+Proyecto de análisis de clientes usando metodología **RFM (Recency, Frequency, Monetary)** sobre dataset de retail.
+
+Este proyecto simula un caso real de analítica de negocio para segmentación de clientes y priorización de campañas de marketing.
 
 ---
 
 ## Objetivo
-Identificar segmentos accionables de clientes para priorizar **retención**, **reactivación (winback)** y **crecimiento**, mediante métricas RFM calculadas desde transacciones.
+
+Identificar segmentos de clientes clave:
+- Champions
+- Loyal customers
+- At risk
+- Hibernating
+- New customers
+
+y proponer acciones de negocio.
 
 ---
 
 ## Stack
-- Python (pandas, numpy, matplotlib)
-- SQLite (base local)
-- SQL (CTEs, agregaciones, filtros)
-- VS Code + Jupyter
+
+- Python
+- Pandas
+- SQLite
+- SQL
+- Matplotlib
 
 ---
 
-## Dataset
-- Fuente: Online Retail (transacciones 2010–2011).
-- Nota: El archivo de base de datos (`.db`) y datos crudos **no se versionan** en GitHub por tamaño/licencia.  
-  El repositorio incluye el flujo reproducible para generarlos localmente.
+## Proceso
+
+1. Extracción desde base SQLite
+2. Limpieza de transacciones
+3. Cálculo RFM
+4. Scoring por percentiles
+5. Segmentación de clientes
+6. Visualización
+7. Export a CSV
 
 ---
 
-## Metodología (RFM)
-1. **Filtrado de transacciones**:
-   - `CustomerID` no nulo
-   - `Quantity > 0` y `UnitPrice > 0`
-   - excluir notas de crédito (`InvoiceNo` que inicia con `C`)
-2. **Definición de fecha de referencia**: `max(invoice_day) + 1 día`
-3. Cálculo por cliente:
-   - **Recency** = días desde última compra
-   - **Frequency** = número de órdenes (distinct `InvoiceNo`)
-   - **Monetary** = suma de ingresos (Quantity * UnitPrice)
-4. **Scoring**:
-   - R invertido (menos días = mejor score)
-   - F y M por cuantiles (1–5)
-5. **Segmentación** (reglas sobre scores R/F/M):
-   - Champions
-   - Loyal Customers
-   - Potential Loyalists
-   - At Risk (High Value)
-   - At Risk (High Frequency)
-   - New Customers
-   - Hibernating
-   - Others
+## Estructura
 
----
-
-## Resultados
-- Se generan:
-  - `data/processed/rfm_customers.csv` (RFM por cliente + segmento)
-  - `data/processed/rfm_segment_summary.csv` (resumen por segmento)
-  - `images/rfm_segments.png` (distribución de clientes por segmento)
-
-Ejemplo de lectura de resultados:
-- **Champions**: alta frecuencia y gasto, compras recientes → beneficios VIP, early access.
-- **At Risk (High Value)**: alto valor histórico pero recencia baja → campañas winback con incentivo.
-- **Hibernating**: baja actividad → campañas de bajo costo o depuración de base.
-
----
-
-## Estructura del proyecto
 customer-segmentation-rfm-sql/
-├─ notebooks/
-│ └─ 01_rfm_segmentation.ipynb
-├─ data/
-│ └─ processed/
-├─ images/
-├─ sql/
-├─ database/ (IGNORADO)
-└─ README.md
+│
+├── notebooks/
+│ └── 01_rfm_segmentation.ipynb
+│
+├── data/
+│ └── processed/
+│ ├── rfm_customers.csv
+│ └── rfm_segment_summary.csv
+│
+├── images/
+│ └── rfm_segments.png
+│
+└── README.md
 
 
 ---
 
-## Cómo correr el proyecto (local)
-1. Crear/colocar base SQLite (si vienes del proyecto 1 puedes reutilizarla):
-   - `database/online_retail.db`
-   - Debe contener la tabla `transactions_clean`
+## Insights
 
-2. Abrir y ejecutar:
-   - `notebooks/01_rfm_segmentation.ipynb`
+- Champions generan mayor revenue
+- Alto volumen de clientes hibernating
+- Segmentos At Risk requieren campañas win-back
 
 ---
 
-## Próximas mejoras
-- Segmentación RFM 100% en SQL (vista/tabla final en SQLite)
-- Cohorts (retención mensual)
-- Reglas de segmentación parametrizables
-- Dashboard (Power BI / Looker Studio)
+## Próximos pasos
+
+- Dashboard en Power BI
+- Clustering K-Means
+- Cohort analysis

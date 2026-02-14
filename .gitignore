@@ -1,0 +1,10 @@
+# Data / bases locales
+database/
+*.db
+*.sqlite
+*.sqlite3
+
+# raw data pesado
+data/*.xlsx
+data/*.csv
+data/raw/
